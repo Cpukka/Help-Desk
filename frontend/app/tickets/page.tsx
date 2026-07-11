@@ -32,8 +32,8 @@ export default function TicketsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterPriority, setFilterPriority] = useState('all');
-  const [sortField, setSortField] = useState('createdAt');
-  const [sortDirection, setSortDirection] = useState('desc');
+  const [sortField, setSortField] = useState<keyof Ticket>('createdAt');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -83,7 +83,7 @@ export default function TicketsPage() {
     return colors[priority] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
   };
 
-  const handleSort = (field: string) => {
+  const handleSort = (field: keyof Ticket) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
@@ -101,12 +101,14 @@ export default function TicketsPage() {
       return matchesSearch && matchesStatus && matchesPriority;
     })
     .sort((a, b) => {
-      let aVal = a[sortField as keyof Ticket] || '';
-      let bVal = b[sortField as keyof Ticket] || '';
+      let aVal: string | number = a[sortField] || '';
+      let bVal: string | number = b[sortField] || '';
+      
       if (sortField === 'createdAt') {
-        aVal = new Date(aVal).getTime();
-        bVal = new Date(bVal).getTime();
+        aVal = new Date(aVal as string).getTime();
+        bVal = new Date(bVal as string).getTime();
       }
+      
       if (typeof aVal === 'string') {
         return sortDirection === 'asc' 
           ? aVal.localeCompare(bVal as string)
@@ -268,13 +270,13 @@ export default function TicketsPage() {
                         <td className="px-4 sm:px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <Link
-                              href={`/tickets/${ticket.id}`}
+                              href={/tickets/}
                               className="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition"
                             >
                               <EyeIcon className="h-5 w-5" />
                             </Link>
                             <Link
-                              href={`/tickets/${ticket.id}/edit`}
+                              href={/tickets//edit}
                               className="p-1 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition"
                             >
                               <PencilIcon className="h-5 w-5" />
