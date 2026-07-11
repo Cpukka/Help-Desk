@@ -47,7 +47,8 @@ builder.Services.AddCors(options =>
                 "http://localhost:3000",
                 "https://localhost:3000",
                 "https://help-desk-psi-ten.vercel.app",
-                "https://help-desk-frontend.vercel.app"
+                "https://help-desk-frontend.vercel.app",
+                "https://help-desk-production-2320.up.railway.app"
             )
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -71,6 +72,21 @@ app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
+// ========================================
+// ROOT ENDPOINT - Fixes 404 on root path
+// ========================================
+app.MapGet("/", () => Results.Ok(new { 
+    message = "🎫 Help Desk API is running!",
+    version = "v1",
+    endpoints = new {
+        health = "/health",
+        swagger = "/swagger",
+        api = "/api"
+    },
+    documentation = "https://help-desk-production-2320.up.railway.app/swagger",
+    timestamp = DateTime.UtcNow
+}));
+
 // Health check endpoint
 app.MapGet("/health", () => Results.Ok(new { 
     status = "Healthy", 
@@ -78,6 +94,9 @@ app.MapGet("/health", () => Results.Ok(new {
     database = "Neon PostgreSQL"
 }));
 
+// ========================================
+// STARTUP
+// ========================================
 Console.WriteLine($"🚀 Help Desk API is running on port: {port}");
 Console.WriteLine($"📚 Swagger UI: http://localhost:{port}/swagger");
 
