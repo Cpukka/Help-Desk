@@ -1,24 +1,34 @@
-﻿# Dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
+﻿# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
-COPY ["src/HelpDesk.API/HelpDesk.API.csproj", "src/HelpDesk.API/"]
-COPY ["src/HelpDesk.Application/HelpDesk.Application.csproj", "src/HelpDesk.Application/"]
-COPY ["src/HelpDesk.Domain/HelpDesk.Domain.csproj", "src/HelpDesk.Domain/"]
-COPY ["src/HelpDesk.Infrastructure/HelpDesk.Infrastructure.csproj", "src/HelpDesk.Infrastructure/"]
-RUN dotnet restore "src/HelpDesk.API/HelpDesk.API.csproj"
+
+# Copy csproj files
+COPY src/HelpDesk.API/HelpDesk.API.csproj src/HelpDesk.API/
+COPY src/HelpDesk.Application/HelpDesk.Application.csproj src/HelpDesk.Application/
+COPY src/HelpDesk.Domain/HelpDesk.Domain.csproj src/HelpDesk.Domain/
+COPY src/HelpDesk.Infrastructure/HelpDesk.Infrastructure.csproj src/HelpDesk.Infrastructure/
+
+# Restore dependencies
+RUN dotnet restore src/HelpDesk.API/HelpDesk.API.csproj
+
+# Copy all source code
 COPY . .
-WORKDIR "/src/src/HelpDesk.API"
-RUN dotnet build "HelpDesk.API.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "HelpDesk.API.csproj" -c Release -o /app/publish
+# Publish the application
+WORKDIR /src/src/HelpDesk.API
+RUN dotnet publish -c Release -o /app/publish
 
-FROM base AS final
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
-COPY --from=publish /app/publish .
+EXPOSE 8080
+
+# Copy published files
+COPY --from=build /app/publish .
+
+# Set environment variables
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# Start the application
 ENTRYPOINT ["dotnet", "HelpDesk.API.dll"]
