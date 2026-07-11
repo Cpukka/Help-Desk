@@ -29,6 +29,7 @@ import {
   UserGroupIcon
 } from '@heroicons/react/24/outline';
 
+// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -42,6 +43,17 @@ ChartJS.register(
   Filler
 );
 
+// Get theme colors safely (only runs on client)
+const getChartColors = () => {
+  const isDark = document.documentElement.classList.contains('dark');
+  return {
+    textColor: isDark ? '#e5e7eb' : '#374151',
+    gridColor: isDark ? '#374151' : '#e5e7eb',
+    tickColor: isDark ? '#9ca3af' : '#6b7280',
+    titleColor: isDark ? '#e5e7eb' : '#1f2937',
+  };
+};
+
 export default function AnalyticsDashboard() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -51,6 +63,12 @@ export default function AnalyticsDashboard() {
     openTickets: 0,
     closedTickets: 0,
     resolvedToday: 0,
+  });
+  const [chartColors, setChartColors] = useState({
+    textColor: '#374151',
+    gridColor: '#e5e7eb',
+    tickColor: '#6b7280',
+    titleColor: '#1f2937',
   });
 
   const weeklyData = {
@@ -134,7 +152,19 @@ export default function AnalyticsDashboard() {
       router.push('/login');
       return;
     }
+    
+    // Update chart colors based on dark mode
+    setChartColors(getChartColors());
+    
+    // Listen for dark mode changes
+    const observer = new MutationObserver(() => {
+      setChartColors(getChartColors());
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    
     fetchData();
+    
+    return () => observer.disconnect();
   }, [router, timeRange]);
 
   const fetchData = async () => {
@@ -148,7 +178,6 @@ export default function AnalyticsDashboard() {
     }
   };
 
-  // Fixed Chart.js options - using proper types
   const lineChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -156,10 +185,8 @@ export default function AnalyticsDashboard() {
       legend: {
         position: 'top' as const,
         labels: {
-          color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
-          font: {
-            size: 12,
-          },
+          color: chartColors.textColor,
+          font: { size: 12 },
           usePointStyle: true,
           pointStyle: 'circle' as const,
         },
@@ -167,30 +194,19 @@ export default function AnalyticsDashboard() {
       title: {
         display: true,
         text: 'Ticket Trends',
-        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#1f2937',
-        font: {
-          size: 16,
-          weight: 'bold' as const,
-        },
+        color: chartColors.titleColor,
+        font: { size: 16, weight: 'bold' as const },
       },
     },
     scales: {
       y: {
         beginAtZero: true,
-        ticks: {
-          color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
-        },
-        grid: {
-          color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
-        },
+        ticks: { color: chartColors.tickColor },
+        grid: { color: chartColors.gridColor },
       },
       x: {
-        ticks: {
-          color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
-        },
-        grid: {
-          color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
-        },
+        ticks: { color: chartColors.tickColor },
+        grid: { color: chartColors.gridColor },
       },
     },
   };
@@ -202,10 +218,8 @@ export default function AnalyticsDashboard() {
       legend: {
         position: 'top' as const,
         labels: {
-          color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
-          font: {
-            size: 12,
-          },
+          color: chartColors.textColor,
+          font: { size: 12 },
           usePointStyle: true,
           pointStyle: 'circle' as const,
         },
@@ -213,30 +227,19 @@ export default function AnalyticsDashboard() {
       title: {
         display: true,
         text: 'Monthly Overview',
-        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#1f2937',
-        font: {
-          size: 16,
-          weight: 'bold' as const,
-        },
+        color: chartColors.titleColor,
+        font: { size: 16, weight: 'bold' as const },
       },
     },
     scales: {
       y: {
         beginAtZero: true,
-        ticks: {
-          color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
-        },
-        grid: {
-          color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
-        },
+        ticks: { color: chartColors.tickColor },
+        grid: { color: chartColors.gridColor },
       },
       x: {
-        ticks: {
-          color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
-        },
-        grid: {
-          color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
-        },
+        ticks: { color: chartColors.tickColor },
+        grid: { color: chartColors.gridColor },
       },
     },
   };
@@ -248,10 +251,8 @@ export default function AnalyticsDashboard() {
       legend: {
         position: 'bottom' as const,
         labels: {
-          color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
-          font: {
-            size: 12,
-          },
+          color: chartColors.textColor,
+          font: { size: 12 },
           usePointStyle: true,
           pointStyle: 'circle' as const,
           padding: 20,

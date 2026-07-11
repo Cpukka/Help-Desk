@@ -270,13 +270,13 @@ export default function TicketsPage() {
                         <td className="px-4 sm:px-6 py-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <Link
-                              href={/tickets/}
+                              href={'/tickets/' + ticket.id}
                               className="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition"
                             >
                               <EyeIcon className="h-5 w-5" />
                             </Link>
                             <Link
-                              href={/tickets//edit}
+                              href={'/tickets/' + ticket.id + '/edit'}
                               className="p-1 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition"
                             >
                               <PencilIcon className="h-5 w-5" />
