@@ -7,12 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // ========================================
 // RAILWAY PORT CONFIGURATION
 // ========================================
-var port = Environment.GetEnvironmentVariable("PORT");
-if (!string.IsNullOrEmpty(port))
-{
-    builder.WebHost.UseUrls($"http://*:{port}");
-    Console.WriteLine($"✅ Running on Railway port: {port}");
-}
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+Console.WriteLine($"✅ Running on port: {port}");
 
 // ========================================
 // SERVICES
@@ -21,6 +18,11 @@ builder.Services.AddControllers();
 
 // Configure PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    Console.WriteLine("⚠️ Using fallback connection string from environment");
+    connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+}
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -73,15 +75,10 @@ app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { 
     status = "Healthy", 
     timestamp = DateTime.UtcNow,
-    database = "PostgreSQL"
+    database = "Neon PostgreSQL"
 }));
 
-// ========================================
-// STARTUP
-// ========================================
-var actualPort = Environment.GetEnvironmentVariable("PORT") ?? "80";
-Console.WriteLine($"🚀 Help Desk API is running on port: {actualPort}");
-Console.WriteLine($"📚 Swagger UI: http://localhost:{actualPort}/swagger");
-Console.WriteLine($"💾 Database: PostgreSQL");
+Console.WriteLine($"🚀 Help Desk API is running on port: {port}");
+Console.WriteLine($"📚 Swagger UI: http://localhost:{port}/swagger");
 
 app.Run();

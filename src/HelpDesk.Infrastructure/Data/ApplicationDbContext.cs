@@ -26,7 +26,6 @@ namespace HelpDesk.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // PostgreSQL uses different column types
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -35,7 +34,6 @@ namespace HelpDesk.Infrastructure.Data
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
-            // Configure primary keys for PostgreSQL
             modelBuilder.Entity<RolePermission>()
                 .HasKey(rp => new { rp.RoleId, rp.PermissionId });
         }
