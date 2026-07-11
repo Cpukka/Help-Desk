@@ -13,3 +13,4 @@ C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\refint\HelpDesk.Application.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.pdb
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\ref\HelpDesk.Application.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.sourcelink.json

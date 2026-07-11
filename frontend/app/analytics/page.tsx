@@ -148,7 +148,8 @@ export default function AnalyticsDashboard() {
     }
   };
 
-  const getChartOptions = (title: string) => ({
+  // Fixed Chart.js options - using proper types
+  const lineChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -156,16 +157,21 @@ export default function AnalyticsDashboard() {
         position: 'top' as const,
         labels: {
           color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
-          font: { size: 12 },
+          font: {
+            size: 12,
+          },
           usePointStyle: true,
-          pointStyle: 'circle',
+          pointStyle: 'circle' as const,
         },
       },
       title: {
         display: true,
-        text: title,
+        text: 'Ticket Trends',
         color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#1f2937',
-        font: { size: 16, weight: 'bold' },
+        font: {
+          size: 16,
+          weight: 'bold' as const,
+        },
       },
     },
     scales: {
@@ -187,11 +193,54 @@ export default function AnalyticsDashboard() {
         },
       },
     },
-  });
+  };
 
-  const lineChartOptions = getChartOptions('Ticket Trends');
-  const barChartOptions = getChartOptions('Monthly Overview');
-  
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+        labels: {
+          color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
+          font: {
+            size: 12,
+          },
+          usePointStyle: true,
+          pointStyle: 'circle' as const,
+        },
+      },
+      title: {
+        display: true,
+        text: 'Monthly Overview',
+        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#1f2937',
+        font: {
+          size: 16,
+          weight: 'bold' as const,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+        },
+        grid: {
+          color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+        },
+      },
+      x: {
+        ticks: {
+          color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+        },
+        grid: {
+          color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+        },
+      },
+    },
+  };
+
   const doughnutOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -200,9 +249,11 @@ export default function AnalyticsDashboard() {
         position: 'bottom' as const,
         labels: {
           color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
-          font: { size: 12 },
+          font: {
+            size: 12,
+          },
           usePointStyle: true,
-          pointStyle: 'circle',
+          pointStyle: 'circle' as const,
           padding: 20,
         },
       },

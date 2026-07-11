@@ -177,3 +177,4 @@ C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\obj\Debug\net9.0\refint\HelpDesk.
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\obj\Debug\net9.0\HelpDesk.API.pdb
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\obj\Debug\net9.0\HelpDesk.API.genruntimeconfig.cache
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\obj\Debug\net9.0\ref\HelpDesk.API.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\obj\Debug\net9.0\HelpDesk.API.sourcelink.json

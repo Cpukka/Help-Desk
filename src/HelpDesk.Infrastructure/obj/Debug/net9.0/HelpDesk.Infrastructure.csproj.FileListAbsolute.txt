@@ -17,3 +17,4 @@ C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Infrastructure\obj\Debug\net9.0\refin
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Infrastructure\obj\Debug\net9.0\HelpDesk.Infrastructure.pdb
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Infrastructure\obj\Debug\net9.0\HelpDesk.Infrastructure.genruntimeconfig.cache
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Infrastructure\obj\Debug\net9.0\ref\HelpDesk.Infrastructure.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Infrastructure\obj\Debug\net9.0\HelpDesk.Infrastructure.sourcelink.json

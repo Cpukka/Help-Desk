@@ -10,3 +10,4 @@ C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Domain\obj\Debug\net9.0\HelpDesk.Doma
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Domain\obj\Debug\net9.0\refint\HelpDesk.Domain.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Domain\obj\Debug\net9.0\HelpDesk.Domain.pdb
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Domain\obj\Debug\net9.0\ref\HelpDesk.Domain.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Domain\obj\Debug\net9.0\HelpDesk.Domain.sourcelink.json
