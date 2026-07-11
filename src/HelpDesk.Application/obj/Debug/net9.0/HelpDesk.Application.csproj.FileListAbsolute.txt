@@ -1,0 +1,16 @@
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\bin\Debug\net9.0\HelpDesk.Application.deps.json
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\bin\Debug\net9.0\HelpDesk.Application.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\bin\Debug\net9.0\HelpDesk.Application.pdb
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\bin\Debug\net9.0\HelpDesk.Domain.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\bin\Debug\net9.0\HelpDesk.Domain.pdb
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.csproj.AssemblyReference.cache
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.AssemblyInfoInputs.cache
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.AssemblyInfo.cs
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.csproj.CoreCompileInputs.cache
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.sourcelink.json
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.026280F4.Up2Date
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\refint\HelpDesk.Application.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\HelpDesk.Application.pdb
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.Application\obj\Debug\net9.0\ref\HelpDesk.Application.dll

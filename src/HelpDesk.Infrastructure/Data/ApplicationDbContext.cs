@@ -26,6 +26,7 @@ namespace HelpDesk.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // User configuration
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -34,8 +35,36 @@ namespace HelpDesk.Infrastructure.Data
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
+            // RolePermission - Composite Primary Key
             modelBuilder.Entity<RolePermission>()
                 .HasKey(rp => new { rp.RoleId, rp.PermissionId });
+
+            // Comment out the problematic relationships for now
+            // Department - Manager relationship (commented out)
+            // modelBuilder.Entity<Department>()
+            //     .HasOne(d => d.Manager)
+            //     .WithMany()
+            //     .HasForeignKey(d => d.ManagerId)
+            //     .OnDelete(DeleteBehavior.SetNull);
+
+            // Ticket relationships (commented out)
+            // modelBuilder.Entity<Ticket>()
+            //     .HasOne(t => t.CreatedBy)
+            //     .WithMany(u => u.CreatedTickets)
+            //     .HasForeignKey(t => t.CreatedById)
+            //     .OnDelete(DeleteBehavior.Restrict);
+
+            // modelBuilder.Entity<Ticket>()
+            //     .HasOne(t => t.AssignedTo)
+            //     .WithMany(u => u.AssignedTickets)
+            //     .HasForeignKey(t => t.AssignedToId)
+            //     .OnDelete(DeleteBehavior.Restrict);
+
+            // modelBuilder.Entity<Ticket>()
+            //     .HasOne(t => t.Department)
+            //     .WithMany(d => d.Tickets)
+            //     .HasForeignKey(t => t.DepartmentId)
+            //     .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

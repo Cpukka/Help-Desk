@@ -9,7 +9,8 @@ namespace HelpDesk.Domain.Entities
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public Guid? ManagerId { get; set; }
-        public virtual User? Manager { get; set; }
+        // Comment out the navigation property for now
+        // public virtual User? Manager { get; set; }
         public virtual ICollection<User> Users { get; set; } = new List<User>();
         public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
