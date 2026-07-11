@@ -46,9 +46,11 @@ builder.Services.AddCors(options =>
             builder.WithOrigins(
                 "http://localhost:3000",
                 "https://localhost:3000",
+                "https://help-desk-blush.vercel.app"
                 "https://help-desk-psi-ten.vercel.app",
                 "https://help-desk-frontend.vercel.app",
-                "https://help-desk-production-2320.up.railway.app"
+                "https://help-desk-production-2320.up.railway.app",
+                "https://*.vercel.app"
             )
             .AllowAnyMethod()
             .AllowAnyHeader()
