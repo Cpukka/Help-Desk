@@ -92,9 +92,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       return;
     }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5252/api';
-    const hubUrl = apiUrl.replace('/api', '') + '/hubs/notifications';
-
+    // ✅ Use the dedicated SIGNALR_URL environment variable
+    const hubUrl = process.env.NEXT_PUBLIC_SIGNALR_URL || 'http://localhost:5252/hubs/notifications';
+    
     console.log('🔗 Connecting to SignalR hub:', hubUrl);
 
     const hubConnection = new signalR.HubConnectionBuilder()
