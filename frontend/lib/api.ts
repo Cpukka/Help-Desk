@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+console.log("NEXT_PUBLIC_API_URL =", process.env.NEXT_PUBLIC_API_URL);
+console.log("NEXT_PUBLIC_SIGNALR_URL =", process.env.NEXT_PUBLIC_SIGNALR_URL);
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5252/api';
 
 export const apiClient = axios.create({

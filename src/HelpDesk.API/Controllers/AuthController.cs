@@ -12,109 +12,128 @@ namespace HelpDesk.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(ApplicationDbContext context)
+        public AuthController(ApplicationDbContext context, ILogger<AuthController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            // Find user by email
-            var user = await _context.Users
-                .Include(u => u.Role)
-                .FirstOrDefaultAsync(u => u.Email == request.Email);
-
-            if (user == null)
+            try
             {
-                return Unauthorized(new { message = "Invalid email or password" });
-            }
+                _logger.LogInformation($"Login attempt for: {request.Email}");
 
-            // Verify password
-            var hashedPassword = HashPassword(request.Password, user.Salt);
-            if (user.PasswordHash != hashedPassword)
-            {
-                return Unauthorized(new { message = "Invalid email or password" });
-            }
+                var user = await _context.Users
+                    .Include(u => u.Role)
+                    .FirstOrDefaultAsync(u => u.Email == request.Email);
 
-            // Generate simple token (in production, use JWT)
-            var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
-
-            return Ok(new
-            {
-                accessToken = token,
-                refreshToken = token,
-                expiresAt = DateTime.UtcNow.AddHours(24),
-                user = new
+                if (user == null)
                 {
-                    user.Id,
-                    user.Email,
-                    user.Username,
-                    user.FirstName,
-                    user.LastName,
-                    user.RoleId,
-                    Role = user.Role?.Name
+                    _logger.LogWarning($"User not found: {request.Email}");
+                    return Unauthorized(new { message = "Invalid email or password" });
                 }
-            });
+
+                var hashedPassword = HashPassword(request.Password, user.Salt);
+                if (user.PasswordHash != hashedPassword)
+                {
+                    _logger.LogWarning($"Invalid password for: {request.Email}");
+                    return Unauthorized(new { message = "Invalid email or password" });
+                }
+
+                var token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+
+                return Ok(new
+                {
+                    accessToken = token,
+                    refreshToken = token,
+                    expiresAt = DateTime.UtcNow.AddHours(24),
+                    user = new
+                    {
+                        user.Id,
+                        user.Email,
+                        user.Username,
+                        user.FirstName,
+                        user.LastName,
+                        user.RoleId,
+                        Role = user.Role?.Name ?? "User"
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Login error for: {request.Email}");
+                return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
+            }
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            // Check if user exists
-            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            try
             {
-                return BadRequest(new { message = "Email already registered" });
-            }
+                _logger.LogInformation($"Registration attempt for: {request.Email}");
 
-            if (await _context.Users.AnyAsync(u => u.Username == request.Username))
-            {
-                return BadRequest(new { message = "Username already taken" });
-            }
-
-            // Get default role (Employee)
-            var defaultRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Employee");
-            if (defaultRole == null)
-            {
-                return BadRequest(new { message = "Default role not found" });
-            }
-
-            // Hash password
-            var salt = GenerateSalt();
-            var passwordHash = HashPassword(request.Password, salt);
-
-            // Create user
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Email = request.Email,
-                Username = request.Username,
-                PasswordHash = passwordHash,
-                Salt = salt,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                RoleId = defaultRole.Id,
-                IsActive = true,
-                IsEmailVerified = false,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                message = "Registration successful",
-                user = new
+                if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    user.Id,
-                    user.Email,
-                    user.Username,
-                    user.FirstName,
-                    user.LastName
+                    return BadRequest(new { message = "Email already registered" });
                 }
-            });
+
+                if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+                {
+                    return BadRequest(new { message = "Username already taken" });
+                }
+
+                var defaultRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Employee");
+                if (defaultRole == null)
+                {
+                    return BadRequest(new { message = "Default role not found" });
+                }
+
+                var salt = GenerateSalt();
+                var passwordHash = HashPassword(request.Password, salt);
+
+                var user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Email = request.Email,
+                    Username = request.Username,
+                    PasswordHash = passwordHash,
+                    Salt = salt,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    RoleId = defaultRole.Id,
+                    IsActive = true,
+                    IsEmailVerified = false,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"User registered successfully: {request.Email}");
+
+                return Ok(new
+                {
+                    message = "Registration successful",
+                    user = new
+                    {
+                        user.Id,
+                        user.Email,
+                        user.Username,
+                        user.FirstName,
+                        user.LastName
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Registration error for: {request.Email}");
+                return StatusCode(500, new { message = "An error occurred during registration", error = ex.Message });
+            }
         }
 
         private static string GenerateSalt()
