@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import * as signalR from '@microsoft/signalr';
 import toast from 'react-hot-toast';
 
@@ -21,13 +21,15 @@ interface NotificationContextType {
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;
   clearNotifications: () => void;
+  isConnected: boolean;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
@@ -65,50 +67,144 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     setNotifications([]);
   }, []);
 
-  useEffect(() => {
+  // Function to stop connection
+  const stopConnection = useCallback(async () => {
+    if (connectionRef.current) {
+      try {
+        await connectionRef.current.stop();
+        connectionRef.current = null;
+        setIsConnected(false);
+        console.log('🔌 SignalR disconnected');
+      } catch (error) {
+        console.error('Error stopping SignalR connection:', error);
+      }
+    }
+  }, []);
+
+  // Function to start connection
+  const startConnection = useCallback(async () => {
+    // Stop any existing connection first
+    await stopConnection();
+
     const token = localStorage.getItem('accessToken');
-    if (!token) return;
+    if (!token) {
+      console.log('No token found, skipping SignalR connection');
+      return;
+    }
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5252/api';
     const hubUrl = apiUrl.replace('/api', '') + '/hubs/notifications';
 
+    console.log('🔗 Connecting to SignalR hub:', hubUrl);
+
     const hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(hubUrl, {
-        accessTokenFactory: () => token,
+        accessTokenFactory: () => {
+          const token = localStorage.getItem('accessToken');
+          return token || '';
+        },
+        transport: signalR.HttpTransportType.WebSockets,
       })
-      .withAutomaticReconnect()
+      .withAutomaticReconnect([0, 2000, 5000, 10000, 30000])
+      .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    hubConnection.start()
-      .then(() => {
-        console.log('SignalR Connected');
-        
-        hubConnection.on('ReceiveNotification', (notification: Notification) => {
-          addNotification(notification);
-        });
+    // Set up event handlers before starting
+    hubConnection.on('ReceiveNotification', (notification: Notification) => {
+      console.log('📨 Received notification:', notification);
+      addNotification(notification);
+    });
 
-        hubConnection.on('TicketUpdated', (data: any) => {
-          addNotification({
-            id: data.id || Date.now().toString(),
-            title: 'Ticket Updated',
-            message: 'Ticket #' + data.ticketId + ' has been updated: ' + data.message,
-            type: 'info',
-            isRead: false,
-            createdAt: new Date().toISOString(),
-            referenceId: data.ticketId,
-          });
-        });
-      })
-      .catch((err) => {
-        console.error('SignalR Connection Error:', err);
+    hubConnection.on('TicketUpdated', (data: any) => {
+      console.log('📨 Ticket updated:', data);
+      addNotification({
+        id: data.id || Date.now().toString(),
+        title: 'Ticket Updated',
+        message: 'Ticket #' + data.ticketId + ' has been updated: ' + data.message,
+        type: 'info',
+        isRead: false,
+        createdAt: new Date().toISOString(),
+        referenceId: data.ticketId,
       });
+    });
 
-    setConnection(hubConnection);
+    // Handle reconnection events
+    hubConnection.onreconnecting((error) => {
+      console.warn('🔄 SignalR reconnecting...', error);
+      setIsConnected(false);
+    });
+
+    hubConnection.onreconnected((connectionId) => {
+      console.log('✅ SignalR reconnected. Connection ID:', connectionId);
+      setIsConnected(true);
+    });
+
+    hubConnection.onclose((error) => {
+      console.warn('🔌 SignalR closed.', error);
+      setIsConnected(false);
+    });
+
+    try {
+      await hubConnection.start();
+      console.log('✅ SignalR Connected successfully');
+      setIsConnected(true);
+    } catch (error) {
+      console.error('❌ SignalR Connection Error:', error);
+      setIsConnected(false);
+      
+      // Try to reconnect after a delay
+      setTimeout(() => {
+        if (connectionRef.current?.state === signalR.HubConnectionState.Disconnected) {
+          console.log('🔄 Attempting to reconnect...');
+          startConnection().catch(e => console.error('Reconnect failed:', e));
+        }
+      }, 5000);
+    }
+
+    connectionRef.current = hubConnection;
+  }, [addNotification, stopConnection]);
+
+  // Effect to handle connection lifecycle
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    
+    if (token) {
+      startConnection();
+    } else {
+      stopConnection();
+    }
+
+    // Listen for token changes (e.g., login/logout)
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'accessToken') {
+        if (event.newValue) {
+          startConnection();
+        } else {
+          stopConnection();
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Custom event for login/logout
+    const handleAuthChange = () => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        startConnection();
+      } else {
+        stopConnection();
+      }
+    };
+
+    window.addEventListener('authChange', handleAuthChange);
 
     return () => {
-      hubConnection.stop();
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authChange', handleAuthChange);
+      stopConnection();
     };
-  }, [addNotification]);
+  }, [startConnection, stopConnection]);
 
   return (
     <NotificationContext.Provider
@@ -119,6 +215,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         markAsRead,
         markAllAsRead,
         clearNotifications,
+        isConnected,
       }}
     >
       {children}
