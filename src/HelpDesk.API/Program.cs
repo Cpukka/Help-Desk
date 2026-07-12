@@ -1,4 +1,5 @@
 ﻿using HelpDesk.Infrastructure.Data;
+using HelpDesk.API.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -15,6 +16,9 @@ Console.WriteLine($"✅ Running on port: {port}");
 // SERVICES
 // ========================================
 builder.Services.AddControllers();
+
+// Add SignalR
+builder.Services.AddSignalR();
 
 // Configure PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -47,6 +51,9 @@ builder.Services.AddCors(options =>
                 "http://localhost:3000",
                 "https://localhost:3000",
                 "https://help-desk-weld.vercel.app",
+                "https://help-desk-blush.vercel.app",
+                "https://help-desk-psi-ten.vercel.app",
+                "https://help-desk-frontend.vercel.app",
                 "https://help-desk-production-2320.up.railway.app",
                 "https://*.vercel.app"
             )
@@ -72,8 +79,11 @@ app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 
+// Map SignalR hubs
+app.MapHub<NotificationHub>("/hubs/notifications");
+
 // ========================================
-// ROOT ENDPOINT - Fixes 404 on root path
+// ROOT ENDPOINT
 // ========================================
 app.MapGet("/", () => Results.Ok(new { 
     message = "🎫 Help Desk API is running!",
