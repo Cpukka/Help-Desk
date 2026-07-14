@@ -28,7 +28,6 @@ namespace HelpDesk.API.Controllers
                 _logger.LogInformation($"Login attempt for: {request.Email}");
 
                 var user = await _context.Users
-                    .Include(u => u.Role)
                     .FirstOrDefaultAsync(u => u.Email == request.Email);
 
                 if (user == null)
@@ -58,8 +57,7 @@ namespace HelpDesk.API.Controllers
                         user.Username,
                         user.FirstName,
                         user.LastName,
-                        user.RoleId,
-                        Role = user.Role?.Name ?? "User"
+                        user.RoleId
                     }
                 });
             }
@@ -87,10 +85,12 @@ namespace HelpDesk.API.Controllers
                     return BadRequest(new { message = "Username already taken" });
                 }
 
-                var defaultRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Employee");
-                if (defaultRole == null)
+                // Get the Employee role dynamically
+                var employeeRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Employee");
+                if (employeeRole == null)
                 {
-                    return BadRequest(new { message = "Default role not found" });
+                    _logger.LogError("Employee role not found in database");
+                    return StatusCode(500, new { message = "Default role not configured" });
                 }
 
                 var salt = GenerateSalt();
@@ -105,7 +105,7 @@ namespace HelpDesk.API.Controllers
                     Salt = salt,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    RoleId = defaultRole.Id,
+                    RoleId = employeeRole.Id, // Use the actual role ID from database
                     IsActive = true,
                     IsEmailVerified = false,
                     CreatedAt = DateTime.UtcNow

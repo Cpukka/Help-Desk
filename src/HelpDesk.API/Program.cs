@@ -41,53 +41,31 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ========================================
-// 🚀 CORS - FIXED WITH SetIsOriginAllowed
-// ========================================
+// CORS for Vercel
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
-    {
-        policy
-            .SetIsOriginAllowed(origin =>
-            {
-                // Allow localhost for development
-                if (origin == "http://localhost:3000" || origin == "https://localhost:3000")
-                    return true;
-                
-                // Allow all Vercel subdomains
-                if (origin.EndsWith(".vercel.app"))
-                    return true;
-                
-                // Allow Railway backend URL
-                if (origin == "https://help-desk-production-2320.up.railway.app")
-                    return true;
-                
-                return false;
-            })
-            .AllowAnyHeader()
+    options.AddPolicy("AllowFrontend",
+        builder =>
+        {
+            builder.WithOrigins(
+                "http://localhost:3000",
+                "https://localhost:3000",
+                "https://help-desk-weld.vercel.app",
+                "https://help-desk-frontend.vercel.app",
+                "https://help-desk-production-2320.up.railway.app",
+                "https://.vercel.app"
+            )
             .AllowAnyMethod()
+            .AllowAnyHeader()
             .AllowCredentials();
-    });
+        });
 });
 
 var app = builder.Build();
 
 // ========================================
-// PIPELINE - CORRECT ORDER
+// PIPELINE
 // ========================================
-
-// 1. Routing
-app.UseRouting();
-
-// 2. CORS - Must come after Routing and before Authentication
-app.UseCors("AllowFrontend");
-
-// 3. Authentication & Authorization
-app.UseAuthentication();
-app.UseAuthorization();
-
-// 4. Swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -95,8 +73,11 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-// 5. Controllers & Hubs
+app.UseCors("AllowFrontend");
+app.UseAuthorization();
 app.MapControllers();
+
+// Map SignalR hubs
 app.MapHub<NotificationHub>("/hubs/notifications");
 
 // ========================================

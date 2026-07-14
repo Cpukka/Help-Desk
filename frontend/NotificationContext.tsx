@@ -218,6 +218,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   );
 }
 
+// ✅ This export MUST exist for the component to work
 export function useNotifications() {
   const context = useContext(NotificationContext);
   if (!context) {

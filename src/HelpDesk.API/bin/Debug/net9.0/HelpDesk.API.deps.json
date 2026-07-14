@@ -11,6 +11,7 @@
           "HelpDesk.Application": "1.0.0",
           "HelpDesk.Infrastructure": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "9.0.0",
+          "Microsoft.AspNetCore.SignalR": "1.2.11",
           "Microsoft.EntityFrameworkCore.Design": "9.0.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.3",
           "Serilog.AspNetCore": "9.0.0",
@@ -68,6 +69,12 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Http.Connections/1.2.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2",
+          "System.Net.WebSockets.WebSocketProtocol": "5.1.0"
+        }
+      },
       "Microsoft.AspNetCore.OpenApi/9.0.0": {
         "dependencies": {
           "Microsoft.OpenApi": "1.6.22"
@@ -77,6 +84,11 @@
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.24.52903"
           }
+        }
+      },
+      "Microsoft.AspNetCore.SignalR/1.2.11": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Connections": "1.2.0"
         }
       },
       "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
@@ -547,6 +559,14 @@
           }
         }
       },
+      "Newtonsoft.Json/11.0.2": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.2.21924"
+          }
+        }
+      },
       "Npgsql/9.0.2": {
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "10.0.9"
@@ -791,6 +811,14 @@
           }
         }
       },
+      "System.Net.WebSockets.WebSocketProtocol/5.1.0": {
+        "runtime": {
+          "lib/net6.0/System.Net.WebSockets.WebSocketProtocol.dll": {
+            "assemblyVersion": "5.1.0.0",
+            "fileVersion": "5.100.24.56208"
+          }
+        }
+      },
       "HelpDesk.Application/1.0.0": {
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
@@ -873,12 +901,26 @@
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Http.Connections/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VYMCOLvdT0y3O9lk4jUuIs8+re7u5+i+ka6ZZ6fIzSJ94c/JeMnAOOg39EB2i4crPXvLoiSdzKWlNPJgTbCZ2g==",
+      "path": "microsoft.aspnetcore.http.connections/1.2.0",
+      "hashPath": "microsoft.aspnetcore.http.connections.1.2.0.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.OpenApi/9.0.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-FqUK5j1EOPNuFT7IafltZQ3cakqhSwVzH5ZW1MhZDe4pPXs9sJ2M5jom1Omsu+mwF2tNKKlRAzLRHQTZzbd+6Q==",
       "path": "microsoft.aspnetcore.openapi/9.0.0",
       "hashPath": "microsoft.aspnetcore.openapi.9.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR/1.2.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fq/EW3G4S+1Xo3aX042Geb/mm+cqStB7cw7FmXLhgpXbsO6dXbU/78URRqpiMozAHjpqSK9BVRkhYhnCg5fgew==",
+      "path": "microsoft.aspnetcore.signalr/1.2.11",
+      "hashPath": "microsoft.aspnetcore.signalr.1.2.11.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
       "type": "package",
@@ -1041,6 +1083,13 @@
       "path": "mono.texttemplating/3.0.0",
       "hashPath": "mono.texttemplating.3.0.0.nupkg.sha512"
     },
+    "Newtonsoft.Json/11.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
+      "path": "newtonsoft.json/11.0.2",
+      "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+    },
     "Npgsql/9.0.2": {
       "type": "package",
       "serviceable": true,
@@ -1201,6 +1250,13 @@
       "sha512": "sha512-VzIU41Sb23Em98hDQc71LPwKTC72xkiG7lpCZaIkf84jBJW+ViaKPa24qqR4FPmj1N4vDWilzs6Dq5Om8aFj+Q==",
       "path": "system.diagnostics.diagnosticsource/10.0.9",
       "hashPath": "system.diagnostics.diagnosticsource.10.0.9.nupkg.sha512"
+    },
+    "System.Net.WebSockets.WebSocketProtocol/5.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cVTT/Zw4JuUeX8H0tdWii0OMHsA5MY2PaFYOq/Hstw0jk479jZ+f8baCicWFNzJlCPWAe0uoNCELoB5eNmaMqA==",
+      "path": "system.net.websockets.websocketprotocol/5.1.0",
+      "hashPath": "system.net.websockets.websocketprotocol.5.1.0.nupkg.sha512"
     },
     "HelpDesk.Application/1.0.0": {
       "type": "project",

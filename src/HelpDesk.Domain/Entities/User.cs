@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using HelpDesk.Domain.Common;
 
 namespace HelpDesk.Domain.Entities
@@ -19,13 +18,6 @@ namespace HelpDesk.Domain.Entities
         public DateTime? RefreshTokenExpiry { get; set; }
         
         public Guid? DepartmentId { get; set; }
-        public virtual Department? Department { get; set; }
         public Guid RoleId { get; set; }
-        public virtual Role Role { get; set; } = null!;
-        
-        public virtual ICollection<Ticket> CreatedTickets { get; set; } = new List<Ticket>();
-        public virtual ICollection<Ticket> AssignedTickets { get; set; } = new List<Ticket>();
-        public virtual ICollection<TicketComment> Comments { get; set; } = new List<TicketComment>();
-        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
     }
 }

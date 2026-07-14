@@ -1,8 +1,9 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 
 console.log("NEXT_PUBLIC_API_URL =", process.env.NEXT_PUBLIC_API_URL);
 console.log("NEXT_PUBLIC_SIGNALR_URL =", process.env.NEXT_PUBLIC_SIGNALR_URL);
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5252/api';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -16,7 +17,7 @@ apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = Bearer ;
     }
     return config;
   },
@@ -35,7 +36,7 @@ apiClient.interceptors.response.use(
         const response = await apiClient.post('/auth/refresh-token', { refreshToken });
         const { accessToken } = response.data;
         localStorage.setItem('accessToken', accessToken);
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = Bearer ;
         return apiClient(originalRequest);
       } catch (refreshError) {
         localStorage.removeItem('accessToken');

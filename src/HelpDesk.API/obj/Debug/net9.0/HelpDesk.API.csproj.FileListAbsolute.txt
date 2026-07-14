@@ -37,6 +37,7 @@ C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Microsoft.Extens
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Npgsql.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\Serilog.dll
@@ -58,6 +59,7 @@ C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\System.Compositi
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\System.Composition.Runtime.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\Chima\HelpDeskSystem\src\HelpDesk.API\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.resources.dll
